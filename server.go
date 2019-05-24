@@ -44,12 +44,12 @@ func excute(path string) string {
 	return string(b)
 }
 func upload(c *gin.Context) {
-	file, _, err := c.Request.FormFile("file")
+	file, header, err := c.Request.FormFile("file")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get file err : %s", err.Error()))
 		return
 	}
-	filename := strconv.FormatInt(time.Now().Unix(), 10)
+	filename := strconv.FormatInt(time.Now().Unix(), 10) + header.Filename
 	out, err := os.Create("imgs/" + filename)
 	if err != nil {
 		log.Fatal(err)
