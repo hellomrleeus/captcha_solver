@@ -86,16 +86,6 @@ func upload(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
 
-// func LoadImage(path string) (img image.Image, err error) {
-// 	file, err := os.Open(path)
-// 	if err != nil {
-// 		return
-// 	}
-// 	defer file.Close()
-// 	img, _, err = image.Decode(file)
-// 	return
-// }
-
 func main() {
 	r := gin.Default()
 	r.POST("/captchsolver", upload)
