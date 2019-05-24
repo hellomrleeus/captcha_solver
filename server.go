@@ -6,7 +6,6 @@ import (
 	"image/png"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -25,18 +24,18 @@ func excute(path string) string {
 	cmd := exec.Command("/bin/sh", "t.sh", path)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	// 保证关闭输出流
 	defer stdout.Close()
 	// 运行命令
 	if err := cmd.Start(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	// 读取输出结果
 	opBytes, err := ioutil.ReadAll(stdout)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	//log.Println(string(opBytes))
 	reg, _ := regexp.Compile(`result:.+`)
@@ -56,12 +55,14 @@ func upload(c *gin.Context) {
 	filename := strconv.FormatInt(time.Now().Unix(), 10) + header.Filename + ".png"
 	out, err := os.Create("imgs/" + filename)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	defer out.Close()
 	_, err = io.Copy(out, file)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	abs, _ := filepath.Abs("imgs/" + filename)
 	//adjust height width
@@ -69,7 +70,7 @@ func upload(c *gin.Context) {
 
 	img, _, err := image.Decode(fi)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
 
@@ -79,7 +80,8 @@ func upload(c *gin.Context) {
 	defer out1.Close()
 	err = png.Encode(out1, rz)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	abs, _ = filepath.Abs("pngs/" + filename)
 	res := excute(abs)
