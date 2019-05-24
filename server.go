@@ -76,7 +76,7 @@ func upload(c *gin.Context) {
 
 	rz := resize.Resize(250, 70, img, resize.Lanczos3)
 
-	out1, err := os.Create("pngs/" + filename + ".png")
+	out1, err := os.Create("pngs/resize_" + filename)
 	defer out1.Close()
 	err = png.Encode(out1, rz)
 	if err != nil {
