@@ -41,7 +41,7 @@ func excute(path string) string {
 	reg, _ := regexp.Compile(`result:.+`)
 	b := reg.Find(opBytes)
 	if len(b) < 7 {
-		return "too small??"
+		return ""
 	}
 	b = b[7:]
 	return string(b)
