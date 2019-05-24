@@ -3,16 +3,43 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
+func excute(path string) string {
+
+	cmd := exec.Command("/bin/sh", "t.sh", path)
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// 保证关闭输出流
+	defer stdout.Close()
+	// 运行命令
+	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
+	}
+	// 读取输出结果
+	opBytes, err := ioutil.ReadAll(stdout)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//log.Println(string(opBytes))
+	reg, _ := regexp.Compile(`result:.+`)
+	b := reg.Find(opBytes)
+	b = b[7:]
+	return string(b)
+}
 func upload(c *gin.Context) {
 	file, _, err := c.Request.FormFile("file")
 	if err != nil {
