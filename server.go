@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"image/png"
 	"io"
 	"io/ioutil"
 	"log"
@@ -12,6 +14,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/nfnt/resize"
 
 	"github.com/gin-gonic/gin"
 )
@@ -60,9 +64,37 @@ func upload(c *gin.Context) {
 		log.Fatal(err)
 	}
 	abs, _ := filepath.Abs("imgs/" + filename)
+	//adjust height width
+	fi, _ := os.Open(abs)
+
+	img, _, err := image.Decode(fi)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	rz := resize.Resize(250, 70, img, resize.Lanczos3)
+
+	out1, err := os.Create("pngs/" + filename + ".png")
+	defer out1.Close()
+	err = png.Encode(out1, rz)
+	if err != nil {
+		log.Fatal(err)
+	}
+	abs, _ = filepath.Abs("pngs/" + filename)
 	res := excute(abs)
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
+
+// func LoadImage(path string) (img image.Image, err error) {
+// 	file, err := os.Open(path)
+// 	if err != nil {
+// 		return
+// 	}
+// 	defer file.Close()
+// 	img, _, err = image.Decode(file)
+// 	return
+// }
 
 func main() {
 	r := gin.Default()
