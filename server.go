@@ -66,6 +66,6 @@ func upload(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-	r.POST("/upload", upload)
+	r.POST("/captchsolver", upload)
 	r.Run(":80")
 }
