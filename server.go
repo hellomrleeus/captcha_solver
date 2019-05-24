@@ -83,7 +83,7 @@ func upload(c *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	abs, _ = filepath.Abs("pngs/" + filename)
+	abs, _ = filepath.Abs("pngs/resize_" + filename)
 	res := excute(abs)
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
