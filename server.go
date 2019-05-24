@@ -49,7 +49,7 @@ func upload(c *gin.Context) {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get file err : %s", err.Error()))
 		return
 	}
-	filename := strconv.FormatInt(time.Now().Unix(), 10) + header.Filename
+	filename := strconv.FormatInt(time.Now().Unix(), 10) + header.Filename + ".png"
 	out, err := os.Create("imgs/" + filename)
 	if err != nil {
 		log.Fatal(err)
