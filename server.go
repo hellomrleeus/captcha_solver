@@ -6,17 +6,20 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func upload(c *gin.Context) {
-	file, header, err := c.Request.FormFile("file")
+	file, _, err := c.Request.FormFile("file")
 	if err != nil {
 		c.String(http.StatusBadRequest, fmt.Sprintf("get file err : %s", err.Error()))
 		return
 	}
-	filename := header.Filename
+	filename := strconv.FormatInt(time.Now().Unix(), 10)
 	out, err := os.Create("imgs/" + filename)
 	if err != nil {
 		log.Fatal(err)
@@ -26,7 +29,9 @@ func upload(c *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c.String(http.StatusOK, "", "ok")
+	abs, _ := filepath.Abs("imgs/" + filename)
+	res := excute(abs)
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
 
 func main() {

@@ -4,9 +4,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os/exec"
+	"regexp"
 )
 
-func excute(path string) {
+func excute(path string) string {
 
 	cmd := exec.Command("/bin/sh", "t.sh", path)
 	stdout, err := cmd.StdoutPipe()
@@ -24,6 +25,9 @@ func excute(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(string(opBytes))
-
+	//log.Println(string(opBytes))
+	reg, _ := regexp.Compile(`result:.+`)
+	b := reg.Find(opBytes)
+	b = b[7:]
+	return string(b)
 }
