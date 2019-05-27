@@ -116,5 +116,6 @@ func benchMark(c *gin.Context) {
 func main() {
 	r := gin.Default()
 	r.POST("/captchsolver", upload)
+	r.GET("/benchmark", benchMark)
 	r.Run(":80")
 }
