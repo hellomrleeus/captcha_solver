@@ -19,6 +19,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var q int
+
 func excute(path string) string {
 
 	cmd := exec.Command("/bin/sh", "t.sh", path)
@@ -87,6 +89,29 @@ func upload(c *gin.Context) {
 	res := excute(abs)
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
+func benchMark(c *gin.Context) {
+	q++
+	c.String(http.StatusOK, "ok, this is No.%d", q)
+}
+
+// func drawPic() {
+// 	r := image.Rect(0, 0, 1000, 1000)
+// 	img := image.NewRGBA(r)
+// 	for i := 0; i < 1000; i++ {
+// 		for j := 0; j < 1000; j++ {
+// 			if i&1 == 1 && j&1 == 1 {
+// 				img.Set(i, j, color.RGBA{255, 255, 255, 255})
+// 			} else {
+// 				img.Set(i, j, color.RGBA{0, 0, 0, 255})
+// 			}
+// 		}
+// 	}
+
+// 	file, _ := os.Create("t.png")
+// 	defer file.Close()
+// 	png.Encode(file, img)
+
+// }
 
 func main() {
 	r := gin.Default()
