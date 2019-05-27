@@ -116,6 +116,7 @@ func upload(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "result": res})
 }
 func benchMark(c *gin.Context) {
+	time.Sleep(50 * time.Millisecond)
 	q++
 	c.String(http.StatusOK, "ok, this is No.%d", q)
 }
@@ -141,6 +142,8 @@ func benchMark(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	gin.DefaultWriter = ioutil.Discard
 	r.Use(timeoutMiddleware(60 * time.Second))
 	r.POST("/captchsolver", upload)
 	r.GET("/benchmark", benchMark)
