@@ -141,7 +141,7 @@ func benchMark(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-	r.Use(timeoutMiddleware(15 * time.Second))
+	r.Use(timeoutMiddleware(60 * time.Second))
 	r.POST("/captchsolver", upload)
 	r.GET("/benchmark", benchMark)
 	r.Run(":80")
