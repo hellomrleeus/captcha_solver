@@ -6,5 +6,5 @@ IP=$3
 for (( c=0; c<${REPLICAS}; c++ ))
 do
     docker run -v $(pwd)/client:/client --name 1mclient_$c -d alpine /ls -la client \
-   # -conn=${CONNECTIONS} -ip=${IP}
+    # -conn=${CONNECTIONS} -ip=${IP}
 done
