@@ -29,7 +29,7 @@ func main() {
 			continue
 		}
 		if fc == *failure {
-			log.Fatalf("fail times: %d", *failure)
+			break
 		}
 		conns = append(conns, c)
 		time.Sleep(time.Millisecond)
