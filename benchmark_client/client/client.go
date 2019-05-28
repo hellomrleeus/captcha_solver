@@ -26,11 +26,12 @@ func main() {
 			fmt.Println("failed to connect", i, err)
 			i--
 			fc++
+			if fc == *failure {
+				break
+			}
 			continue
 		}
-		if fc == *failure {
-			break
-		}
+
 		conns = append(conns, c)
 		time.Sleep(time.Millisecond)
 	}
