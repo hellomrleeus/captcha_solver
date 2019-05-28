@@ -1,4 +1,4 @@
-#!/bin/bash address
+#!/bin/bash address, 缺省是 127.0.0.1
 CONNECTIONS=$1
 REPLICAS=$2
 IP=$3
