@@ -11,9 +11,11 @@ import (
 var (
 	ip          = flag.String("ip", "127.0.0.1", "server IP")
 	connections = flag.Int("conn", 1, "number of tcp connections")
+	failure     = flag.Int("fail", 10, "failure count")
 )
 
 func main() {
+	fc := 0
 	flag.Parse()
 	addr := *ip + ":80"
 	log.Printf("连接到 %s", addr)
@@ -23,7 +25,11 @@ func main() {
 		if err != nil {
 			fmt.Println("failed to connect", i, err)
 			i--
+			fc++
 			continue
+		}
+		if fc == *failure {
+			log.Fatalf("fail times: %d", *failure)
 		}
 		conns = append(conns, c)
 		time.Sleep(time.Millisecond)
